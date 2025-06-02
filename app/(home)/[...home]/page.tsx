@@ -54,19 +54,17 @@ export default function HomeSeacPage() {
         <div className="flex flex-col items-center justify-center p-4 space-y-8 text-center min-h-[70vh]">
           {/* Enhanced Heading Text */}
           <div className="space-y-4">
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4 drop-shadow-xl">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">
+            <h1 className="text-sm md:text-4xl font-extrabold text-white mb-4 drop-shadow-xl">
+              <span className="bg-clip-text ">
                 {heading?.title}
               </span>
             </h1>
-            <h2 className="text-2xl md:text-3xl font-semibold text-white/90 drop-shadow-lg">
-              <span className="text-yellow-300 font-bold">     {heading?.description}</span>
-            </h2>
+      
 
           </div>
 
           {/* Booking Form Card */}
-          <div className="w-full max-w-6xl rounded-xl shadow-2xl transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/20">
+          <div className="w-full max-w-6xl  ">
             <div className="w-full">
               <BookingForm defaultType={defaultType} defaultForm={defaultFrom} />
             </div>

@@ -85,7 +85,7 @@ export default function CarListingPage() {
     return (
         <>
             {/* for large devices */}
-            <div className=" bg-[#e3fcde] hidden md:block container mx-auto px-4 py-6 max-w-6xl">
+            <div className="  hidden md:block container mx-auto px-4 py-6 max-w-6xl">
                 {/* Header section with trip details */}
                 <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border mb-6">
                     <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
@@ -472,22 +472,22 @@ export default function CarListingPage() {
                         </div>
 
 
-                              {/* ✅ Modify button */}
-                    <div className="mt-4">
-                        <button
-                            onClick={handleModelOpen}
-                            className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                        >
-                            Modify Details
-                        </button>
-                  
-                </div>
+                        {/* ✅ Modify button */}
+                        <div className="mt-4">
+                            <button
+                                onClick={handleModelOpen}
+                                className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                            >
+                                Modify Details
+                            </button>
+
+                        </div>
                     </div>
 
-                    
+
                 </div>
 
-              
+
 
                 {/* ✅ Modal */}
                 {isModalOpen && (
@@ -508,7 +508,16 @@ export default function CarListingPage() {
                         </div>
                     </div>
                 )}
-                 
+                      {/* Header */}
+                            <div className="text-center m-3">
+                              <Image
+                                src="/cabHeading.jpg" // Replace this with your actual image path
+                                alt="Top Rated Cabs & Chauffeurs"
+                                width={1000} // Adjust width as needed
+                                height={600} // Adjust height as needed
+                                className="mx-auto rounded-lg shadow-lg"
+                              />
+                            </div>
                 {/* Package Tabs - Horizontal Scroll */}
                 <div className="flex overflow-x-auto gap-2 mb-3 pb-2 no-scrollbar">
                     <button

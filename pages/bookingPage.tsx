@@ -69,7 +69,7 @@ const BookingPage = () => {
 
 
         // Calculate the advance payment
-        const advancePayment = (finalPrice * percentage) / 100;
+        const advancePayment = Math.ceil((finalPrice * percentage) / 100);
 
         return advancePayment;
     };
@@ -111,6 +111,40 @@ const BookingPage = () => {
         setShowOffers(false);
     };
 
+    const deletePromotionalEmail = async () => {
+        const promoEmailId = localStorage.getItem("promoEmailId");
+
+        if (!promoEmailId) {
+            console.error("promoEmailId not found in localStorage");
+            return;
+        }
+
+        try {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_baseURL}/api/promotional/promotional-emails/${promoEmailId}`,
+                {
+                    method: "DELETE",
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to delete promotional email');
+            }
+
+            console.log(data.message);
+            localStorage.removeItem("promoEmailId");
+            return data;
+        } catch (error) {
+            console.error("Error deleting promotional email:");
+            throw error;
+        }
+    };
+
     const handleSubmit = async () => {
         setIsLoading(true);
         try {
@@ -131,12 +165,20 @@ const BookingPage = () => {
                     returnDate: returndate,
                     orderType: tripType,
                     advancePayment: advancePayment,
-                    distance: distance
+                    distance: distance,
+                    carType: type,
+                    luggage : selectedOffers.luggageSpace ? "750" : "0",
+                    carModel : selectedOffers.carModel ? "500" : "0" ,
+                    petAllowance : selectedOffers.petAllowance ? "750" : "0" ,
+                    refundable : selectedOffers.refundable ? "595" : "0",
+                    chauffeurs: selectedOffers.languagePreference ? "249" : "0",
                 })
             });
 
             const data = await res.json();
             if (data?.order?.bookingId) {
+                deletePromotionalEmail()
+                localStorage.removeItem("searchPath")
                 router.push(`/payment/${data.order.bookingId}`);
             }
             setIsLoading(false)
@@ -145,6 +187,9 @@ const BookingPage = () => {
             console.error('Fetch error:', error);
         }
     };
+
+
+
 
     const isFormInvalid =
         !formData.name ||
@@ -160,8 +205,8 @@ const BookingPage = () => {
                     <Card>
                         <CardHeader>
                             <CardTitle className="text-lg font-bold">
-                                {showSection === 'form' ? "CONTACT & PICKUP DETAILS" :
-                                    showSection === 'offers' ? "SPECIAL OFFERS" : "PAYMENT DETAILS"}
+                                {showSection === 'form' ? "SPECIAL OFFERS" :
+                                    showSection === 'offers' ? "CONTACT DETAILS" : "PAYMENT DETAILS"}
                             </CardTitle>
                         </CardHeader>
 
@@ -323,7 +368,6 @@ const BookingPage = () => {
                                         className="bg-blue-600 hover:bg-blue-700 w-full cursor-pointer"
                                         onClick={() => setShowSection('payment')}
                                         disabled={isFormInvalid}
-
                                     >
                                         Proceed
                                     </Button>

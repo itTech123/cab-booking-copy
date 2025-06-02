@@ -31,8 +31,15 @@ interface Order {
   extraHr?: number;
   extraKm?: number;
   waitingCharge?: number;
-  bookingId: String
-  pinCode? : string
+  bookingId: string;
+  bookingStatus: string
+  pinCode?: string;
+  luggage?: string;
+  carModel?: string;
+  petAllowance?: string;
+  refundable?: string;
+  chauffeurs?: string
+
 }
 
 export default function OrderDetailPage() {
@@ -44,7 +51,7 @@ export default function OrderDetailPage() {
   const [error, setError] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
-  console.log(order?.returnDate)
+
   useEffect(() => {
     const fetchOrder = async () => {
       try {
@@ -131,7 +138,7 @@ export default function OrderDetailPage() {
       </div>
     );
   }
-  
+
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex justify-between items-center">
@@ -183,6 +190,10 @@ export default function OrderDetailPage() {
                 <p className="font-medium">{order.bookingId}</p>
               </div>
               <div>
+                <p className="text-sm text-gray-500">Booking Status</p>
+                <p className="font-medium">{order.bookingStatus}</p>
+              </div>
+              <div>
                 <p className="text-sm text-gray-500">Booking Type</p>
                 <p className="font-medium">{order.orderType}</p>
               </div>
@@ -220,6 +231,46 @@ export default function OrderDetailPage() {
                   {format(new Date(order.createdAt), 'MMM dd, yyyy hh:mm a')}
                 </p>
               </div>
+              <div className="w-full bg-gray-100 p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 border-b border-gray-300 pb-2">
+                  Addon Services
+                </h2>
+
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {order.luggage !== "0" && (
+                    <div className="bg-white p-4 rounded shadow-sm">
+                      <p className="text-sm text-gray-500">Luggage</p>
+                      <p className="font-medium text-gray-800">₹{order.luggage}</p>
+                    </div>
+                  )}
+                  {order.carModel !== "0" && (
+                    <div className="bg-white p-4 rounded shadow-sm">
+                      <p className="text-sm text-gray-500">Car Model</p>
+                      <p className="font-medium text-gray-800">₹{order.carModel}</p>
+                    </div>
+                  )}
+                  {order.petAllowance !== "0" && (
+                    <div className="bg-white p-4 rounded shadow-sm">
+                      <p className="text-sm text-gray-500">Pet Allowance</p>
+                      <p className="font-medium text-gray-800">₹{order.petAllowance}</p>
+                    </div>
+                  )}
+                  {order.refundable !== "0" && (
+                    <div className="bg-white p-4 rounded shadow-sm">
+                      <p className="text-sm text-gray-500">Refundable</p>
+                      <p className="font-medium text-gray-800">₹{order.refundable}</p>
+                    </div>
+                  )}
+                  {order.chauffeurs !== "0" && (
+                    <div className="bg-white p-4 rounded shadow-sm">
+                      <p className="text-sm text-gray-500">Chauffeurs</p>
+                      <p className="font-medium text-gray-800">₹{order.chauffeurs}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+
             </CardContent>
           </Card>
 

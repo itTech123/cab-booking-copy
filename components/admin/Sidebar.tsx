@@ -9,7 +9,7 @@ import {
     SidebarMenu,
     SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Home, User, Settings, Menu, ShoppingCart, Car, FolderMinus, CaseLowerIcon, User2 } from "lucide-react";
+import { Home, User, Settings, Menu, ShoppingCart, Car, FolderMinus, CaseLowerIcon, User2, SearchIcon, CarTaxiFront, ListOrdered, RulerDimensionLine } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -27,6 +27,10 @@ export function Sidebar() {
         { name: "Orders", href: "/admin/orders", icon: <ShoppingCart size={18} /> },
         { name: "Forms", href: "/admin/forms", icon: <FolderMinus size={18} /> },
         { name: "Careers", href: "/admin/careers", icon: <CaseLowerIcon size={18} /> },
+        { name: "SeachList", href: "/admin/searchList", icon: <SearchIcon size={18} /> },
+        { name: "Taxi Service", href: "/admin/taxi-services", icon: <CarTaxiFront size={18} /> },
+        { name: "Create Order", href: "/admin/add-order", icon: <ListOrdered size={18} /> },
+        { name: "Driver Request", href: "/admin/driverRequest", icon: <RulerDimensionLine size={18} /> },
     ];
 
     const toggleSidebar = () => {

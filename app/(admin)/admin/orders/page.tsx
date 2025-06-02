@@ -50,6 +50,10 @@ export default function OrdersPage() {
 
     fetchOrders();
   }, []);
+  function safeFormatDate(dateString: string | undefined) {
+    const date = new Date(dateString || '');
+    return isNaN(date.getTime()) ? 'Invalid date' : format(date, 'MMM dd, yyyy');
+  }
 
   const handleRowClick = (orderId: string) => {
     router.push(`/admin/orders/singleOrder/${orderId}`);
@@ -97,9 +101,9 @@ export default function OrdersPage() {
           </TableHeader>
           <TableBody className="bg-white divide-y divide-gray-200">
             {orders.map((order) => (
-              <TableRow 
-                key={order._id} 
-                onClick={() => handleRowClick(order._id)} 
+              <TableRow
+                key={order._id}
+                onClick={() => handleRowClick(order._id)}
                 className="hover:bg-blue-50 transition cursor-pointer"
               >
                 <TableCell className="px-6 py-4 whitespace-nowrap">
@@ -118,8 +122,9 @@ export default function OrdersPage() {
                   </span>
                 </TableCell>
                 <TableCell className="px-6 py-4 whitespace-nowrap text-gray-500">
-                  {format(new Date(order.pickupDate), 'MMM dd, yyyy')}
+                  {safeFormatDate(order.createdAt)}
                 </TableCell>
+
                 <TableCell className="px-6 py-4 whitespace-nowrap text-gray-500">
                   ₹{order.ridefare?.toLocaleString()}
                 </TableCell>

@@ -42,7 +42,7 @@ const setWithExpiry = (key: string, value: string, days: number) => {
       })
 
       const data = await res.json()
-      console.log(data)
+  
       if (!res.ok) {
         throw new Error(data.message || 'Login failed')
       }

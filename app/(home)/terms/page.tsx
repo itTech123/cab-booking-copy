@@ -199,7 +199,7 @@ export default function TermsAndConditionsPage() {
               <h3 className="font-semibold">6.2 Data Usage</h3>
               <p>
                 Your data will be used in accordance with our{" "}
-                <a href="/privacy-policy" className="underline">
+                <a href="/privacyPolicy" className="underline">
                   Privacy Policy
                 </a>
                 , which is incorporated into these Terms and Conditions.
@@ -228,6 +228,7 @@ export default function TermsAndConditionsPage() {
             <div className="ml-4 space-y-2">
               <h3 className="font-semibold">8.1 Governing Law</h3>
               <p>These Terms and Conditions are governed by the laws of India.</p>
+              <p>Your ride is reserved with BroomBoom Transportation Services Private Limited.</p>
             </div>
           </section>
 

@@ -19,7 +19,7 @@ export default function OneWayCabBookingPage() {
   };
   currentCity = formatCityName(currentCity)
   travelCity = formatCityName(travelCity)
-  
+
   return (
     <>
       <div className="relative min-h-screen">
@@ -67,27 +67,27 @@ export default function OneWayCabBookingPage() {
 
       <CustomerReviewSlider />
 
-      <section className="w-full py-12 ">
-        <div className="w-[80%] max-w-6xl mx-auto px-4 text-center shadow-md border border-gray-300">
-          <h2 className="text-3xl font-bold mb-12 text-gray-800 border-t border-b text-undeline py-4">
+      <section className="w-full mt-12">
+        <div className="w-[70%] max-w-screen-xl mx-auto text-center rounded-xl px-4 py-6 bg-white border border-blue-500 shadow-[0_0_35px_8px_rgba(59,130,246,0.6)]">
+          <h2 className="text-3xl font-semibold text-gray-800 mb-6 pb-2 border-t-4 border-b-4 border-blue-500 inline-block px-6">
             Featured In
           </h2>
 
-          <div className="flex flex-wrap justify-center items-center gap-12 bg-white rounded-xl p-10 ">
+          <div className="flex flex-wrap justify-center items-center gap-6 mt-4">
             <img
               src="/business-standred.png"
               alt="Featured in Business Standard"
-              className="h-24 md:h-28 object-contain"
-            />
-            <img
-              src="/hindustan-times.png"
-              alt="Featured in Hindustan Times"
-              className="h-24 md:h-28 object-contain"
+              className="h-24 md:h-28 object-contain px-2"
             />
             <img
               src="/mint.png"
               alt="Featured in Mint"
-              className="h-14 md:h-14 object-contain"
+              className="h-20 md:h-24 object-contain px-2"
+            />
+            <img
+              src="/hindustan-times.png"
+              alt="Featured in Hindustan Times"
+              className="h-24 md:h-28 object-contain px-2"
             />
           </div>
         </div>

@@ -85,6 +85,7 @@ function handleAction(formData: FormData) {
         <div>
           <h3 className="text-lg font-semibold text-white mb-2">Services</h3>
           <ul className="space-y-2">
+            <li><Link href="/services/taxi-services/kolkata" className="hover:underline hover:text-white transition-colors">Taxi Services</Link></li>
             <li><Link href="/services/local-rentals" className="hover:underline hover:text-white transition-colors">Local Car Rentals</Link></li>
             <li><Link href="/services/outstation" className="hover:underline hover:text-white transition-colors">Outstation Taxi</Link></li>
             <li><Link href="/oneWayCabs" className="hover:underline hover:text-white transition-colors">One way cabs</Link></li>
@@ -148,9 +149,9 @@ function handleAction(formData: FormData) {
       <div className="border-t border-gray-700 mt-10 pt-6 text-center text-sm text-gray-400">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p>© {new Date().getFullYear()} CabGo. All rights reserved.</p>
+            <p>© Copyright {new Date().getFullYear()} Txigo.Com All rights reserved.</p>
             <div className="flex gap-4 mt-4 md:mt-0">
-              <Link href="/privacy" className="hover:underline hover:text-white transition-colors">Privacy Policy</Link>
+              <Link href="/privacyPolicy" className="hover:underline hover:text-white transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="hover:underline hover:text-white transition-colors">Terms of Service</Link>
               <Link href="/cookies" className="hover:underline hover:text-white transition-colors">Cookie Policy</Link>
             </div>

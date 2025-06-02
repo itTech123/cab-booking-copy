@@ -23,7 +23,7 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
   const safeValue = (value: any, defaultValue = '') => {
     return value === null || value === undefined ? defaultValue : value;
   };
- 
+
   const [formData, setFormData] = useState({
     name: safeValue(initialData?.name),
     phone: safeValue(initialData?.phone),
@@ -36,7 +36,6 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
     returnDate: initialData?.returnDate
       ? new Date(initialData.returnDate).toISOString().split("T")[0]
       : "",
-      
     pickupTime: safeValue(initialData?.pickupTime, ""),
     ridefare: safeValue(initialData?.ridefare, ""),
     orderType: safeValue(initialData?.orderType, ''),
@@ -46,15 +45,21 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
     extraHr: safeValue(initialData?.extraHr, "0"),
     extraKm: safeValue(initialData?.extraKm, "0"),
     waitingCharge: safeValue(initialData?.waitingCharge, "0"),
-    pinCode : safeValue(initialData?.pinCode, "")
+    pinCode: safeValue(initialData?.pinCode, ""),
+    bookingStatus: safeValue(initialData?.bookingStatus, ""),
+    luggage: safeValue(initialData?.luggage, ""),
+    carModel: safeValue(initialData?.carModel, ""),
+    petAllowance: safeValue(initialData?.petAllowance, "0"),
+    refundable: safeValue(initialData?.refundable, "0"),
+    chauffeurs: safeValue(initialData?.chauffeurs, "0"),
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -65,6 +70,7 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Customer Information */}
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input
@@ -93,9 +99,10 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
             type="email"
             value={formData.email}
             onChange={handleChange}
-            required
           />
         </div>
+
+        {/* Booking Details */}
         <div className="space-y-2">
           <Label htmlFor="orderType">Booking Type</Label>
           <Select
@@ -113,6 +120,9 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
             </SelectContent>
           </Select>
         </div>
+     
+
+        {/* Location Details */}
         <div className="space-y-2">
           <Label htmlFor="pickup">Pickup Location</Label>
           <Input
@@ -132,7 +142,7 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
             onChange={handleChange}
           />
         </div>
-         <div className="space-y-2">
+        <div className="space-y-2">
           <Label htmlFor="pinCode">Pin Code</Label>
           <Input
             id="pinCode"
@@ -141,6 +151,8 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
             onChange={handleChange}
           />
         </div>
+
+        {/* Date & Time */}
         <div className="space-y-2">
           <Label htmlFor="pickupDate">Pickup Date</Label>
           <Input
@@ -175,6 +187,8 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
             />
           </div>
         )}
+
+        {/* Financial Information */}
         <div className="space-y-2">
           <Label htmlFor="ridefare">Total Fare (₹)</Label>
           <Input
@@ -197,10 +211,63 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
           />
         </div>
         <div className="space-y-2">
+          <Label htmlFor="refundable">Refundable Amount (₹)</Label>
+          <Input
+            id="refundable"
+            name="refundable"
+            type="number"
+            value={formData.refundable}
+            onChange={handleChange}
+          />
+        </div>
+           <div className="space-y-2">
+          <Label htmlFor="carModel">Car Model (₹)</Label>
+          <Input
+            id="carModel"
+            name="carModel"
+            value={formData.carModel}
+            onChange={handleChange}
+            placeholder="e.g., Toyota Innova, Swift Dzire"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="luggage">Luggage (₹)</Label>
+          <Input
+            id="luggage"
+            name="luggage"
+            value={formData.luggage}
+            onChange={handleChange}
+            placeholder="Number of bags or description"
+          />
+        </div>
+          <div className="space-y-2">
+          <Label htmlFor="petAllowance">Pet Allowance (₹)</Label>
+          <Input
+            id="petAllowance"
+            name="petAllowance"
+            type="number"
+            value={formData.petAllowance}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="chauffeurs">Chauffeurs (₹)</Label>
+          <Input
+            id="chauffeurs"
+            name="chauffeurs"
+            type="number"
+            value={formData.chauffeurs}
+            onChange={handleChange}
+          />
+        </div>
+         {/* Additional Charges */}
+        <div className="space-y-2">
           <Label htmlFor="distance">Distance (km)</Label>
           <Input
             id="distance"
             name="distance"
+            type="number"
             value={formData.distance}
             onChange={handleChange}
           />
@@ -216,7 +283,7 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="extraHr">Extra Hours</Label>
+          <Label htmlFor="extraHr">Extra Hours (₹)</Label>
           <Input
             id="extraHr"
             name="extraHr"
@@ -226,7 +293,7 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="extraKm">Extra KM</Label>
+          <Label htmlFor="extraKm">Extra KM (₹)</Label>
           <Input
             id="extraKm"
             name="extraKm"
@@ -244,6 +311,24 @@ export default function OrderForm({ initialData, onSubmit, isEditMode = false }:
             value={formData.waitingCharge}
             onChange={handleChange}
           />
+        </div>
+
+        {/* Status */}
+        <div className="space-y-2">
+          <Label htmlFor="bookingStatus">Booking Status</Label>
+          <select
+            id="bookingStatus"
+            name="bookingStatus"
+            value={formData.bookingStatus || ""}
+            onChange={(e) => setFormData({ ...formData, bookingStatus: e.target.value })}
+            className="border border-gray-300 rounded px-3 py-2 w-full"
+          >
+            <option value="">Select Status</option>
+            <option value="booked">Booked</option>
+            <option value="pending">Pending</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="completed">Completed</option>
+          </select>
         </div>
       </div>
       <Button type="submit" className="w-full md:w-auto">

@@ -218,7 +218,7 @@ export default function AirportCarListingPage() {
  }
 console.log(isLoggedin)
   return (
-    <div className="min-h-screen bg-[#e3fcde]">
+    <div className="min-h-screen ">
       {/* Breadcrumb */}
       <div className="container mx-auto px-4 py-4 flex items-center text-sm">
         <Link href="/" className="text-blue-600 hover:underline">Home</Link>

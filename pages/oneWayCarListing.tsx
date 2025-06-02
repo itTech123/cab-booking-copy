@@ -99,7 +99,7 @@ const OneWayCarListing = () => {
   return (
     <>
       {/* For large devices */}
-      <div className=" bg-[#e3fcde] hidden md:block container mx-auto px-4 py-6 max-w-6xl">
+      <div className=" hidden md:block container mx-auto px-4 py-6 max-w-6xl">
         {/* Header section with trip details */}
         <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-sm border mb-6">
           <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
@@ -122,7 +122,7 @@ const OneWayCarListing = () => {
             <div className="space-y-1">
               <p className="text-gray-500 dark:text-gray-400">Distance</p>
               <p className="font-medium">
-                {loading ? "Calculating..." : `${distance} km`}
+                {loading ? "Calculating..." : `${distance}`}
               </p>
             </div>
           </div>
@@ -273,7 +273,16 @@ const OneWayCarListing = () => {
             </div>
           </div>
         )}
-
+           {/* Header */}
+            <div className="text-center">
+              <Image
+                src="/cabHeading.jpg" // Replace this with your actual image path
+                alt="Top Rated Cabs & Chauffeurs"
+                width={1000} // Adjust width as needed
+                height={600} // Adjust height as needed
+                className="mx-auto rounded-lg shadow-lg"
+              />
+            </div>
         {/* Horizontal Car Selector */}
         <div className="mb-4">
           <div className="flex overflow-x-auto gap-3 pb-2 no-scrollbar">
@@ -317,25 +326,27 @@ const OneWayCarListing = () => {
               <CardContent className="p-3 space-y-2">
                 <div className="flex justify-between items-start">
                   <div>
-                    <div className="text-md font-bold">{car?.type}</div>
-                  </div>
-                  <div className="flex gap-1">
+                      <div className="flex gap-1">
                     <Badge className="text-xs">₹{car?.ratePerKm}/km</Badge>
                   </div>
+                    <div className="text-md font-bold">{car?.type}</div>
+                    
+                  </div>
+                
                 </div>
 
                 <div className="text-xs mt-2 space-y-1">
                   <div className="flex justify-between">
                     <span className="text-gray-500">Distance:</span>
-                    <span>{distance} km</span>
+                    <span>{distance}</span>
                   </div>
                   <div className="flex flex-col items-end">
                     <span className="bg-green-100 text-green-700 text-xs font-medium px-2 py-0.5 rounded mb-1">
                       Lowest Price
                     </span>
                     <div className="flex justify-between font-semibold w-full">
-                      <span className="text-gray-500">Total Price:</span>
-                      <span>₹{car?.totalPrice}</span>
+                      <span className="text-gray-500 text-2xl">Fare:</span>
+                      <span className="font-bold text-2xl">₹{car?.totalPrice}</span>
                     </div>
                   </div>
 
@@ -407,7 +418,7 @@ const OneWayCarListing = () => {
                   </div>
                 )}
 
-                <Button className="w-full mt-3 text-sm" onClick={() => handleBookNow(car?.totalPrice, car?.type)}>Book Now</Button>
+                <Button className="w-full mt-3 text-sm" disabled={distance === "0"} onClick={() => handleBookNow(car?.totalPrice, car?.type)}>Book Now</Button>
               </CardContent>
             </Card>
           ))}

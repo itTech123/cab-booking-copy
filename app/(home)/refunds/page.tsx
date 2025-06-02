@@ -143,10 +143,7 @@ export default function CancellationRefundPolicyPage() {
                   of the outcome within a reasonable timeframe.
                 </li>
                 <li>
-                  If the refund is approved, it will be processed using the
-                  original payment method. The time it takes for the refund to
-                  reflect in your account may vary depending on your bank or
-                  payment provider.
+                  If the refund is approved, it gets processed and credited within 5-7 business working days to the original payment source. The time it takes for the refund to reflect in your account may vary depending on your bank or payment provider.
                 </li>
               </ul>
 

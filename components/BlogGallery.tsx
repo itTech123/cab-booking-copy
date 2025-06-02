@@ -1,12 +1,5 @@
 // app/gallery/page.tsx
 import Image from "next/image";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Car,
-  UserCheck,
-  CreditCard,
-  Smile,
-} from "lucide-react";
 
 export default function BlogGallery() {
   return (
@@ -14,10 +7,10 @@ export default function BlogGallery() {
       {/* Top 3 Blog Images */}
       <div>
         {/* Mobile View - Stacked Images on Small Screens */}
-        <div className="md:hidden grid grid-cols-3 gap-2"> {/* Using grid to arrange images */}
-          <div className="relative w-full h-48 sm:h-56 overflow-hidden rounded-xl"> {/* Reduced height */}
+        <div className="md:hidden grid grid-cols-3 gap-2">
+          <div className="relative w-full h-48 sm:h-56 overflow-hidden rounded-xl">
             <Image
-              src="/banner.jpg"
+              src="/showImg-1.png"
               alt="small.png"
               layout="fill"
               objectFit="cover"
@@ -26,7 +19,7 @@ export default function BlogGallery() {
           </div>
           <div className="relative w-full h-48 sm:h-56 overflow-hidden rounded-xl">
             <Image
-              src="/banner.jpg"
+              src="/showImg-2.png"
               alt="Mobile Cab Image 2"
               layout="fill"
               objectFit="cover"
@@ -35,7 +28,7 @@ export default function BlogGallery() {
           </div>
           <div className="relative w-full h-48 sm:h-56 overflow-hidden rounded-xl">
             <Image
-              src="/banner.jpg"
+              src="/showImg-3.png"
               alt="Mobile Cab Image 3"
               layout="fill"
               objectFit="cover"
@@ -71,13 +64,19 @@ export default function BlogGallery() {
       </div>
 
       {/* Why Choose Our Cabs */}
-      <div className="text-center bg-[#fee9e6] p-6 rounded-lg">
-        <h2 className="text-3xl font-bold mb-6">Why Choose Our Cabs?</h2>
+      <div className="text-center bg-[#fee9e6] rounded-lg">
+        <h2 className="text:md md:text-3xl font-bold md:mb-6">WHY TXIGO STANDS OUT?</h2>
         <div className="flex justify-between gap-1 px-2 w-full overflow-hidden">
           {/* Clean & Hygienic Cars */}
           <div className="flex flex-col items-center flex-1 min-w-0">
-            <div className="w-8 h-8 md:h-20 md:w-20 bg-white rounded-full flex items-center justify-center shadow-md mb-1">
-              <Car className="w-4 h-4 text-[#FF671F] md:h-14 md:w-14" />
+            <div className="w-8 h-8 md:h-20 md:w-20 bg-white rounded-full flex items-center justify-center shadow-md mb-1 overflow-hidden p-0">
+              <Image
+                src="/icons/pickups.png"
+                alt="Clean Cars"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover" // Changed to cover and full dimensions
+              />
             </div>
             <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Clean and</p>
             <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Hygienic Car</p>
@@ -85,35 +84,51 @@ export default function BlogGallery() {
 
           {/* Expert Chauffeurs */}
           <div className="flex flex-col items-center flex-1 min-w-0">
-            <div className="w-8 h-8 md:h-20 md:w-20 bg-white rounded-full flex items-center justify-center shadow-md mb-1">
-              <UserCheck className="w-4 h-4 text-[#FF671F] md:h-14 md:w-14" />
+            <div className="w-8 h-8 md:h-20 md:w-20 bg-white rounded-full flex items-center justify-center shadow-md mb-1 overflow-hidden p-0">
+              <Image
+                src="/icons/money.png"
+                alt="Clean Cars"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover" // Changed to cover and full dimensions
+              />
             </div>
-            <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">
-              Transparent </p>
-            <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">
-              Billing</p>
+            <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Clean and</p>
+            <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Hygienic Car</p>
           </div>
+
 
           {/* Transparent Billing */}
           <div className="flex flex-col items-center flex-1 min-w-0">
-            <div className="w-8 h-8 md:h-20 md:w-20 bg-white rounded-full flex items-center justify-center shadow-md mb-1">
-              <CreditCard className="w-4 h-4 text-[#FF671F] md:h-14 md:w-14" />
+            <div className="w-8 h-8 md:h-20 md:w-20 bg-white rounded-full flex items-center justify-center shadow-md mb-1 overflow-hidden p-0">
+              <Image
+                src="/icons/1.png"
+                alt="Clean Cars"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover" // Changed to cover and full dimensions
+              />
             </div>
-            <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Expert </p>
-            <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Chauffeurs</p>
+            <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Clean and</p>
+            <p className="text-[10px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Hygienic Car</p>
           </div>
 
           {/* 2,000+ Happy Clients */}
           <div className="flex flex-col items-center flex-1 min-w-0">
-            <div className="w-8 h-8 md:h-20 md:w-20 bg-white rounded-full flex items-center justify-center shadow-md mb-1">
-              <Smile className="w-4 h-4 md:h-14 md:w-14 text-[#FF671F]" />
+            <div className="w-8 h-8 md:h-20 md:w-20 bg-white rounded-full flex items-center justify-center shadow-md mb-1 overflow-hidden p-0">
+              <Image
+                src="/icons/map.png"
+                alt="Clean Cars"
+                width={32}
+                height={32}
+                className="w-full h-full object-cover" // Changed to cover and full dimensions
+              />
             </div>
-            <p className="text-[10px] md:text-lg font-medium text-center leading-tight truncate px-0.5">2000+</p>
-            <p className="text-[10px] md:text-lg font-medium text-center leading-tight truncate px-0.5"> Cities </p>
+            <p className="text-[8px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Clean and</p>
+            <p className="text-[8px] font-medium text-center leading-tight truncate px-0.5 md:text-lg">Hygienic Car</p>
           </div>
         </div>
       </div>
-
     </div>
   );
 }

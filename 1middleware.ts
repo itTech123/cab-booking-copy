@@ -3,8 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken");
   const refreshToken = req.cookies.get("refreshToken");
-  console.log(accessToken,"mdacces")
-  console.log(refreshToken,"mdrefresh")
+
   const { pathname } = req.nextUrl;
    
   if (!accessToken && refreshToken) {

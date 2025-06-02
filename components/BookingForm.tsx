@@ -40,6 +40,7 @@ import AirportSearch from "./SearchAirport";
 import SearchAddress from "./SearchAddress";
 import { popularLocations } from "@/data";
 import { PopoverClose } from "@radix-ui/react-popover";
+import { getAuthCookies } from "@/lib/cookies";
 
 
 export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultForm?: string | undefined; defaultType?: string | undefined; isLoggedIn?: Boolean }) => {
@@ -53,6 +54,7 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
     const [trip, setTrip] = useState("");
     const [packageItem, setPackageItem] = useState("");
 
+    const isVerified = getAuthCookies();
 
     const router = useRouter();
     const [selectedState, setSelectedState] = useState('');
@@ -72,6 +74,102 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
     const handleTabChange = (value: string) => {
         setActiveTab(value)
     }
+
+    const handleCreateSearch = async () => {
+        try {
+
+            const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
+
+            const rawData = {
+                name: userDetails.name,
+                email: userDetails.email,
+                phone: userDetails.phone,
+                pickup: fromCity,
+                drop: toCity || "",
+                bookingType: activeTab,
+                pickupDate: date,
+                returnDate: returnDate,
+                pickupTime: time,
+                package: packageItem,
+            };
+
+            // Filter out empty or undefined values
+            const filteredData = Object.fromEntries(
+                Object.entries(rawData).filter(([_, value]) =>
+                    value !== undefined && value !== null && value !== ''
+                )
+            );
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_baseURL}/api/search/create`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(filteredData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save search');
+            }
+
+            console.log('Search saved successfully');
+        } catch (error) {
+            console.error('Error creating search:', error);
+        }
+    };
+
+    const handleCreatePromotionalEmail = async (redirectPath: string) => {
+        try {
+            const userDetails = JSON.parse(localStorage.getItem('userDetails') || '{}');
+
+            const rawData = {
+                name: userDetails.name,
+                email: userDetails.email,
+                phone: userDetails.phone,
+                pickup: fromCity,
+                bookingType: activeTab,
+                redirectPath: redirectPath,
+                ...(toCity && { drop: toCity }) // Add 'drop' only if toCity is available
+            };
+
+            // Filter out empty or undefined values
+            const filteredData = Object.fromEntries(
+                Object.entries(rawData).filter(([_, value]) =>
+                    value !== undefined && value !== null && value !== ''
+                )
+            );
+
+            // drop is now optional, so it's removed from required fields
+            const requiredFields = ['name', 'email', 'phone', 'pickup', 'bookingType', 'redirectPath'];
+            const missingFields = requiredFields.filter(key => !filteredData[key]);
+
+            if (missingFields.length > 0) {
+                console.error("Missing required fields:", missingFields);
+                return;
+            }
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_baseURL}/api/promotional/promotional-emails`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(filteredData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save promotional email');
+            }
+
+            const responseData = await response.json();
+
+            localStorage.setItem('promoEmailId', responseData._id || responseData.id);
+
+            console.log('Promotional email saved successfully');
+        } catch (error) {
+            console.error('Error creating promotional email:', error);
+        }
+    };
+
 
     const handleSubmit = () => {
         let redirectPath = "";
@@ -175,24 +273,32 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
         }
 
 
-        if (isLoggedIn) {
-
-
+        if (isLoggedIn || isVerified?.isVerified) {
+            handleCreateSearch()
+            handleCreatePromotionalEmail(redirectPath)
+            const redirectData = {
+                path: redirectPath
+            };
+            localStorage.setItem("searchPath", JSON.stringify(redirectData));
             router.push(redirectPath);
         } else {
-            console.log(isLoggedIn, "hdhdh")
+
             // If user is not logged in, store the redirect path with expiration
-            const expirationTime = new Date().getTime() + 5 * 60 * 1000; // 5 minutes from now
+            const expirationTime = new Date().getTime() + 5 * 60 * 1000;
             const redirectData = {
                 path: redirectPath,
                 expiresAt: expirationTime,
             };
 
             localStorage.setItem("redirectPath", JSON.stringify(redirectData));
+            localStorage.setItem("searchPath", JSON.stringify(redirectData));
+
             router.push("/login");
         }
     };
-    
+
+
+
     const handleSwapCities = () => {
         const currentFrom = fromCity;
         const currentTo = toCity;
@@ -203,14 +309,14 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
     return (
         <div className="relative max-w-4xl mx-auto">
 
-            <div className="block md:hidden pt-4">
-                <Card className="w-full mx-auto p-4 shadow-xl rounded-xl border">
+            <div className="block md:hidden ">
+                <Card className="w-full mx-auto py-0 shadow-xl rounded-xl border">
                     <Tabs defaultValue="one-way">
-                        <div className="mb-4">
-                            <TabsList className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full px-2 py-3 bg-gray-50 rounded-lg">
+                        <div className="">
+                            <TabsList className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full px-2  bg-gray-50 rounded-lg">
                                 <TabsTrigger
                                     value="one-way"
-                                    className="text-sm sm:text-base font-semibold py-3 px-2 rounded-md transition-all
+                                    className="text-sm sm:text-base font-semibold  px-2 rounded-md transition-all
               data-[state=active]:text-white data-[state=active]:bg-blue-600
               data-[state=inactive]:text-gray-700 data-[state=inactive]:bg-white
               data-[state=inactive]:hover:bg-gray-100 shadow-sm border border-gray-200"
@@ -393,36 +499,46 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
                                     </div>
                                 </div>
 
-                                {/* Pickup Date Row */}
+                                {/* Combined Pickup Date & Time Row */}
                                 <div className="flex items-center gap-2">
                                     <Label className="text-sm font-bold uppercase w-20 text-left">Pickup Date</Label>
-                                    <div className="flex-1">
-                                        <Popover>
-                                            <PopoverTrigger asChild>
-                                                <Button
-                                                    variant="outline"
-                                                    className="w-full h-12 justify-start text-left font-bold px-4 border-gray-300 hover:border-blue-500"
-                                                >
-                                                    <CalendarIcon className="mr-2 h-4 w-4" />
-                                                    {date ? format(date, "dd MMM yyyy") : "SELECT DATE"}
-                                                </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0 shadow-lg rounded-lg">
-                                                <div className="flex flex-col p-3">
-                                                    <Calendar
-                                                        mode="single"
-                                                        selected={date}
-                                                        onSelect={setDate}
-                                                        disabled={(date) => date.getTime() < new Date().setHours(0, 0, 0, 0)}
-                                                        initialFocus
-                                                        className="border-0"
-                                                    />
-                                                    <PopoverClose asChild>
-                                                        <Button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold">OK</Button>
-                                                    </PopoverClose>
-                                                </div>
-                                            </PopoverContent>
-                                        </Popover>
+                                    <div className="flex-1 flex gap-2">
+                                        <div className="flex-1">
+                                            <Popover>
+                                                <PopoverTrigger asChild>
+                                                    <Button
+                                                        variant="outline"
+                                                        className="w-full h-12 justify-start text-left font-bold px-4 border-gray-300 hover:border-blue-500"
+                                                    >
+                                                        <CalendarIcon className="mr-2 h-4 w-4" />
+                                                        {date ? format(date, "dd MMM yyyy") : "SELECT DATE"}
+                                                    </Button>
+                                                </PopoverTrigger>
+                                                <PopoverContent className="w-auto p-0 shadow-lg rounded-lg">
+                                                    <div className="flex flex-col p-3">
+                                                        <Calendar
+                                                            mode="single"
+                                                            selected={date}
+                                                            onSelect={setDate}
+                                                            disabled={(date) => date.getTime() < new Date().setHours(0, 0, 0, 0)}
+                                                            initialFocus
+                                                            className="border-0"
+                                                        />
+                                                        <PopoverClose asChild>
+                                                            <Button className="mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold">OK</Button>
+                                                        </PopoverClose>
+                                                    </div>
+                                                </PopoverContent>
+                                            </Popover>
+                                        </div>
+                                        <div className="flex-1">
+                                            <Input
+                                                type="time"
+                                                className="h-12 px-4 font-bold border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                                                value={time}
+                                                onChange={(e) => setTime(e.target.value)}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -457,17 +573,6 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
                                             </PopoverContent>
                                         </Popover>
                                     </div>
-                                </div>
-
-                                {/* Time Row */}
-                                <div className="flex items-center gap-2">
-                                    <Label className="text-sm font-bold uppercase w-20 text-left">Time</Label>
-                                    <Input
-                                        type="time"
-                                        className="flex-1 h-12 px-4 font-bold border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-                                        value={time}
-                                        onChange={(e) => setTime(e.target.value)}
-                                    />
                                 </div>
                             </div>
                         </TabsContent>
@@ -669,10 +774,10 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
                         </TabsContent>
                     </Tabs>
 
-                    <div className="mt-4 px-4">
+                    <div className="mb-1 px-4">
                         <Button className="w-full h-12 text-sm font-bold shadow-lg bg-blue-600 hover:bg-blue-700 cursor-pointer" onClick={handleSubmit}>
                             <Search className="h-4 w-4 mr-2" />
-                            SEARCH CABS
+                            Explore Cabs
                         </Button>
                     </div>
                 </Card>
@@ -1158,7 +1263,7 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
                                 </div>
 
                                 {/* Pickup Time */}
-                                 <div className="space-y-2">
+                                <div className="space-y-2">
                                     <Label className="font-semibold">PICKUP TIME</Label>
                                     <div
                                         className="relative"
@@ -1188,7 +1293,7 @@ export const BookingForm = ({ defaultForm, defaultType, isLoggedIn }: { defaultF
                             <div className="mx-auto w-full sm:w-2/3 md:w-1/2 lg:w-2/5 xl:w-1/3"> {/* Responsive width container */}
                                 <Button className="w-full h-12 sm:h-14 text-sm sm:text-base md:text-lg gap-2 font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02] -z-10" onClick={handleSubmit}>
                                     <Search className="h-4 w-4 sm:h-5 sm:w-5" />
-                                    Search Cabs
+                                    Explore Cabs
                                 </Button>
                             </div>
                         </div>
